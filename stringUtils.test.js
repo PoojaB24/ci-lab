@@ -1,9 +1,9 @@
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
+const { capitalize, reverse } = require('./stringUtils');
 
-function reverse(str) {
-    return str.split('').reverse().join('');
-}
+test('capitalize first letter', () => {
+    expect(capitalize('hello')).toBe('Hello');
+});
 
-module.exports = { capitalize, reverse };
+test('reverse string', () => {
+    expect(reverse('hello')).toBe('olleh');
+});
