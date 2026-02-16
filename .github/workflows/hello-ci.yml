@@ -7,5 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run Python Tests
-        run: python3 test_calc.py
+      - name: Install pytest
+        run : pip install pytest
+        
+      - name : run tests
+        run : pytsest
