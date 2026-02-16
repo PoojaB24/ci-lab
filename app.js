@@ -4,3 +4,4 @@ if (!apiKey) {
   process.exit(1);
 }
 console.log("App is running securely.");
+
