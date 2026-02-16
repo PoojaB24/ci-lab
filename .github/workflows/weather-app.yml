@@ -1,51 +1,53 @@
 name: Weather App Production Check
+
 on:
-push:
-branches: [ main ]
-pull_request:
-branches: [ main ]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
-build-and-test:
-runs-on: ubuntu-latest
-# --- THIS IS THE MATRIX SECTION ---
-strategy:
-matrix:
-node-version: [18.x, 20.x]
-# ----------------------------------
-steps:
-- name: Checkout Code
-uses: actions/checkout@v4
-- name: Use Node.js ${{ matrix.node-version }}
-uses: actions/setup-node@v4
-with:
-node-version: ${{ matrix.node-version }}
+  build-and-test:
+    runs-on: ubuntu-latest
 
-- name: Install Dependencies
-run: npm install # Even if the folder is empty, this is good
-practice
+    # --- MATRIX SECTION ---
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    # ----------------------
 
-- name: Run Unit Tests
-run: node test.js
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-- name: Run Security Check
-run: node app.js
-env:
-# This connects the GitHub Secret to the code&#39;s environment
-variable
-WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-package:
-# This ensures packaging ONLY happens if BOTH Node versions pass
-needs: build-and-test
-runs-on: ubuntu-latest
-steps:
-- uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm install
 
-- name: Create Build Artifact
-run: zip -r weather-app-dist.zip . -x &quot;*.git*&quot;
+      - name: Run Unit Tests
+        run: node test.js
 
-- name: Upload Artifact
-uses: actions/upload-artifact@v4
-with:
-name: weather-app-dist
-path: weather-app-dist.zip
+      - name: Run Security Check
+        run: node app.js
+        env:
+          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+
+  package:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Build Artifact
+        run: zip -r weather-app-dist.zip . -x "*.git*"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-app-dist
+          path: weather-app-dist.zip
