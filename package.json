@@ -1,7 +1,10 @@
 {
-  "name": "weather-app",
+  "name": "ci-lab",
   "version": "1.0.0",
   "scripts": {
-    "test": "node test.js"
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
